@@ -41,6 +41,16 @@ async function saree(){
             res.send(result);
         });
 
+        app.get('/addProducts', async (req, res) => {
+            const name = req.query.name;
+            const query = {
+                cat_name: name
+            }
+            const cursor = addProductCollection.find(query);
+            const products = await cursor.toArray();
+            res.send(products);
+        });
+
     }
     finally{
 
