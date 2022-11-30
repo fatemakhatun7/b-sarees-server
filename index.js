@@ -19,6 +19,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function saree(){
     try{
         const categoryCollection = client.db('BSarees').collection('categories');
+        const userCollection = client.db('BSarees').collection('users');
 
         app.get('/categories', async (req, res) => {
             const query = {}
@@ -26,6 +27,12 @@ async function saree(){
             const categories = await cursor.toArray();
             res.send(categories);
         });
+
+        app.post('/users', async(req,res)=>{
+            const sareeUser = req.body;
+            const result = await userCollection.insertOne(sareeUser)
+            res.send(result);
+        })
 
     }
     finally{
