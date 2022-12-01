@@ -21,6 +21,7 @@ async function saree(){
         const categoryCollection = client.db('BSarees').collection('categories');
         const userCollection = client.db('BSarees').collection('users');
         const addProductCollection = client.db('BSarees').collection('addProducts');
+        const wishlistCollection = client.db('BSarees').collection('wishlists');
 
         app.get('/categories', async (req, res) => {
             const query = {}
@@ -53,8 +54,19 @@ async function saree(){
 
         app.get('/addProducts', async (req, res) => {
             const name = req.query.name;
-            const query = {
-                cat_name: name
+            const email = req.query.email;
+
+            let query = { }
+            
+            if(name){
+                query = {
+                    cat_name: name
+                }
+            }
+            if(email){
+                query = {
+                    email
+                }
             }
             const cursor = addProductCollection.find(query);
             const products = await cursor.toArray();
@@ -71,6 +83,27 @@ async function saree(){
             } catch (error) {
                 console.log(error);
             }
+        });
+
+        app.post('/wishlists', async(req,res)=>{
+            const wish = req.body;
+            const result = await wishlistCollection.insertOne(wish)
+            res.send(result);
+        })
+
+        app.get('/wishlists', async (req, res) => {
+            const email = req.query.email;
+
+            let query = { }
+            
+            if(email){
+                query = {
+                    buyer_email: email
+                }
+            }
+            const cursor = wishlistCollection.find(query);
+            const wishlists = await cursor.toArray();
+            res.send(wishlists);
         });
 
     }
