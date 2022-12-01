@@ -22,6 +22,7 @@ async function saree(){
         const userCollection = client.db('BSarees').collection('users');
         const addProductCollection = client.db('BSarees').collection('addProducts');
         const wishlistCollection = client.db('BSarees').collection('wishlists');
+        const advertiseCollection = client.db('BSarees').collection('advertise');
 
         app.get('/categories', async (req, res) => {
             const query = {}
@@ -104,6 +105,19 @@ async function saree(){
             const cursor = wishlistCollection.find(query);
             const wishlists = await cursor.toArray();
             res.send(wishlists);
+        });
+
+        app.post('/advertise', async(req,res)=>{
+            const advertise = req.body;
+            const result = await advertiseCollection.insertOne(advertise)
+            res.send(result);
+        })
+
+        app.get('/advertise', async (req, res) => {
+            const query = {}
+            const cursor = advertiseCollection.find(query);
+            const advertise = await cursor.toArray();
+            res.send(advertise);
         });
 
     }
