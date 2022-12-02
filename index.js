@@ -47,6 +47,13 @@ async function saree(){
             res.send(users);
         });
 
+        app.delete('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await userCollection.deleteOne(query);
+            res.send(result);
+        })
+
         app.post('/addProducts', async (req, res) => {
             const addProduct = req.body;
             const result = await addProductCollection.insertOne(addProduct)
@@ -106,6 +113,13 @@ async function saree(){
             const wishlists = await cursor.toArray();
             res.send(wishlists);
         });
+
+        app.delete('/wishlists/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await wishlistCollection.deleteOne(query);
+            res.send(result);
+        })
 
         app.post('/advertise', async(req,res)=>{
             const advertise = req.body;
