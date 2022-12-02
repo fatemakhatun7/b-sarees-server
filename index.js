@@ -23,6 +23,7 @@ async function saree(){
         const addProductCollection = client.db('BSarees').collection('addProducts');
         const wishlistCollection = client.db('BSarees').collection('wishlists');
         const advertiseCollection = client.db('BSarees').collection('advertise');
+        const myOrdersCollection = client.db('BSarees').collection('myOrders');
 
         app.get('/categories', async (req, res) => {
             const query = {}
@@ -132,6 +133,27 @@ async function saree(){
             const cursor = advertiseCollection.find(query);
             const advertise = await cursor.toArray();
             res.send(advertise);
+        });
+
+        app.post('/myOrders', async(req,res)=>{
+            const myOrders = req.body;
+            const result = await myOrdersCollection.insertOne(myOrders)
+            res.send(result);
+        })
+
+        app.get('/myOrders', async (req, res) => {
+            const email = req.query.email;
+
+            let query = { }
+            
+            if(email){
+                query = {
+                    buyer_email: email
+                }
+            }
+            const cursor = myOrdersCollection.find(query);
+            const myOrders = await cursor.toArray();
+            res.send(myOrders);
         });
 
     }
